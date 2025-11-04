@@ -1,0 +1,309 @@
+Robust version built off of C1C Henry-Simpson's capstone. 
+Features added: 
+- More robust classification parameters 
+- More accurate classification of log samples 
+- Implementation of AI advisor tool
+- Connection of HTML output tool to AI pipeline
+
+Utilized chatgpt to create linux-like sample test logs
+Utilized chatgpt to create reccomended course of action .txt logs to be used in ragging
+
+Utilized ChatGPT for optimization, error handling, and refining results.
+
+Optimization
+
+Truncate message to keep context while staying under model limits
+
+def _truncate(text: str, max_chars: int) -> str:
+    if not text:
+        return ""
+    text = text.strip()
+    if len(text) <= max_chars:
+        return text
+    head = text[: max_chars // 2]
+    tail = text[-(max_chars // 2):]
+    return head + "\n...\n" + tail
+
+
+Pass only what is needed to the classifier
+
+payload = {
+    "text": text[:max_chars],
+    "conf_threshold": conf_thr,
+    "max_chars": max_chars,
+    "multi_label_top": multi_label_top,
+}
+
+
+Sliding window generator to overcome context window limits
+
+@staticmethod
+def _windows(lines: List[str], chunk_lines: int, stride_lines: int, max_chunks=None):
+    i = 0
+    n = len(lines)
+    count = 0
+    while i < n:
+        j = min(n, i + chunk_lines)
+        yield (i, j, "".join(lines[i:j]))
+        i += max(1, chunk_lines - stride_lines)
+        count += 1
+        if max_chunks and count >= max_chunks:
+            break
+
+
+Use of running maxes to avoid storing all scores
+
+if label2score:
+    for lab, sc in label2score.items():
+        alt_scores[lab] = max(alt_scores.get(lab, 0.0), sc)
+
+
+Division to avoid extra checks or branches
+
+denom = max(1, benign_count + suspicious_count)
+suspicious_rate = suspicious_count / float(denom)
+
+
+Helper to avoid loading entire files when sampling
+
+# Allow simple "path" or "path::N"
+raw = tool_input.strip().strip("'").strip('"')
+parts = raw.split("::")
+path = parts[0]
+try:
+    n = int(parts[1]) if len(parts) > 1 else 500
+except Exception:
+    n = 500
+
+with open(path, "r", encoding="utf-8", errors="ignore") as f:
+    lines = f.readlines()[:n]
+return "".join(lines)
+
+
+# Error handling
+
+Transformer availability with warning
+
+try:
+    from transformers import pipeline as hf_pipeline
+except Exception as e:
+    hf_pipeline = None
+    logging.getLogger(__name__).warning("transformers not available, DeBERTa tool will raise: %s", e)
+
+
+Failure if a classifier is requested without transformers
+
+@classmethod
+def _get_classifier(cls):
+    if hf_pipeline is None:
+        raise RuntimeError("transformers not installed. Install transformers, sentencepiece, accelerate, torch")
+    if cls._classifier is None:
+        cls._classifier = hf_pipeline("zero-shot-classification", model=cls._model_name)
+    return cls._classifier
+
+
+Robust input parsing for LogReader with JSON error messages
+
+try:
+    cfg = json.loads(tool_input)
+    path = cfg.get("path")
+    n = int(cfg.get("n", 500))
+except Exception:
+    return json.dumps({"error": "Expected 'path' or JSON with {'path': ..., 'n': 500}."})
+
+if not path or not os.path.exists(path):
+    return json.dumps({"error": f"Path not found: {path}"})
+
+
+Classifier input parsing and empty-text handling
+
+if tool_input and tool_input.strip().startswith("{"):
+    try:
+        payload = json.loads(tool_input)
+        text = payload.get("text", "")
+        conf_thresh = float(payload.get("conf_threshold", conf_thresh))
+        max_chars = int(payload.get("max_chars", max_chars))
+        multi_label_top = bool(payload.get("multi_label_top", multi_label_top))
+    except Exception:
+        text = tool_input
+if not text:
+    return json.dumps({"error": "No text provided"})
+
+
+Batch analyzer input validation and JSON decoding
+
+try:
+    cfg = json.loads(tool_input)
+    path = cfg.get("path")
+    conf_thr = float(cfg.get("conf_threshold", 0.30))
+    max_chars = int(cfg.get("max_chars", 4000))
+    chunk_lines = int(cfg.get("chunk_lines", 200))
+    stride_lines = int(cfg.get("stride_lines", 50))
+    max_chunks = cfg.get("max_chunks")
+    min_score = float(cfg.get("min_score", 0.55))
+    benign_floor = float(cfg.get("benign_floor", 0.40))
+    multi_label_top = bool(cfg.get("multi_label_top", True))
+except Exception:
+    return json.dumps({"error": "Expected JSON with at least {'path': ...}."})
+
+if not path or not os.path.exists(path):
+    return json.dumps({"error": f"Path not found: {path}"})
+
+out_json = self.single.use(json.dumps(payload))
+try:
+    data = json.loads(out_json)
+except Exception:
+    continue
+
+
+Advisor tool strict input checking
+
+try:
+    cfg = json.loads(tool_input)
+except Exception:
+    return json.dumps({"error": "advisor expects JSON input"})
+
+
+HTML tool error handling
+
+try:
+    cfg = json.loads(tool_input)
+except Exception:
+    return json.dumps({"error": "html_report expects JSON"})
+
+try:
+    if isinstance(advisor, str):
+        advisor = json.loads(advisor)
+    recs = advisor.get("recommendations") or []
+except Exception:
+    recs = []
+
+if auto_open:
+    try:
+        import webbrowser, pathlib
+        webbrowser.open(pathlib.Path(out_path).resolve().as_uri())
+    except Exception:
+        pass
+
+
+# Refining results
+
+
+Top label tie-break that prefers a close non-benign over a razor-thin benign
+
+res = clf(
+    text,
+    candidate_labels=self._TOP_LEVEL_LABELS,
+    hypothesis_template=self._HYPOTHESIS_TOP,
+    multi_label=multi_label,
+)
+labels = res["labels"]
+scores = res["scores"]
+top_idx = 0
+if multi_label and len(labels) > 1:
+    best_score = scores[0]
+    for i, (lab, sc) in enumerate(zip(labels, scores)):
+        if lab != "benign activity" and sc >= best_score - 0.05:
+            top_idx = i
+            break
+return labels[top_idx], float(scores[top_idx]), res
+
+
+Refine only when confident and not benign
+
+refined = None
+if top_label.lower() != "benign activity" and top_score >= conf_thresh:
+    fine_label, fine_score, fine_res = self._refine(text, top_label)
+    if fine_label is not None:
+        refined = {"label": fine_label, "score": fine_score, "full_result": fine_res}
+
+
+Heuristic benign screen with majority ratio
+
+KNOWN_BENIGN_REGEX = [
+    r"CRON\[\d+\]: \(root\) CMD \(run-parts /etc/cron\.daily\)",
+    r"systemd\[1\]: (Starting|Started|Finished) (Rotate log files|Daily apt download activities|Daily man-db regeneration)",
+    r"systemd\[1\]: man-db\.service: Succeeded\.",
+    r"NetworkManager\[\d+\]: .*state change: activated -> activated.*\(reason 'refresh'\)",
+    r"man-db\[\d+\]: Building manual page index",
+    r"sshd\[\d+\]: Accepted publickey for \w+ from (10\.|192\.168\.|172\.(1[6-9]|2\d|3[0-1])\.)",
+    r"sudo\[\d+\]:\s+\w+\s+: .* COMMAND=/usr/bin/apt\b",
+    r"sudo\[\d+\]: pam_unix\(sudo:session\): session (opened|closed) for user root",
+    r"kernel: \[\s*\d+\.\d+\] iwlwifi .* Unhandled alg: 0x[0-9a-fA-F]+",
+]
+BENIGN_MAJORITY_RATIO = 0.6
+
+
+Benign-first tie-break and floors during aggregation
+
+BENIGN_MARGIN = 0.10
+
+best_lab = top_label
+best_sc = top_score
+benign_sc = label2score.get("benign activity")
+
+decide_benign = False
+if force_benign:
+    decide_benign = True
+    best_lab, best_sc = "benign activity", 0.99
+elif benign_sc is not None:
+    if (best_lab != "benign activity" and (best_sc - benign_sc) <= self.BENIGN_MARGIN) or (benign_sc >= benign_floor):
+        decide_benign = True
+        best_lab, best_sc = "benign activity", benign_sc
+
+
+Accept suspicious only when above a confidence floor
+
+min_score = float(cfg.get("min_score", 0.55))
+...
+if best_sc >= min_score:
+    suspicious_count += 1
+    tally_top[best_lab] = tally_top.get(best_lab, 0) + 1
+
+
+Simple health mapping that also flags high-severity families
+
+denom = max(1, benign_count + suspicious_count)
+suspicious_rate = suspicious_count / float(denom)
+
+health = "healthy"
+if suspicious_rate >= 0.35 or any("impact" in k or "command and control" in k for k in tally_top):
+    health = "compromised"
+elif suspicious_rate >= 0.10:
+    health = "needs further analysis"
+
+
+Build alternative score bars for the HTML dashboard
+
+alternatives = [{"label": lab, "score": sc}
+                for lab, sc in sorted(alt_scores.items(), key=lambda x: -x[1])]
+
+
+HTML optimization
+
+from html import escape
+health = (analysis.get("summary") or {}).get("health", "unknown")
+srate = (analysis.get("summary") or {}).get("suspicious_rate", 0.0)
+
+health_card = f"""
+<div class="card">
+  <h3 style="margin:0 0 8px 0">System Health</h3>
+  <div class="muted">State: <strong>{escape(str(health)).title()}</strong> • Suspicious rate: {float(srate):.2%}</div>
+</div>
+<div class="card">
+  <h3 style="margin:0 0 8px 0">Recommended Actions</h3>
+  <ol>{"".join(f"<li>{escape(str(r))}</li>" for r in recs) or "<li class='muted'>No recommendations</li>"}</ol>
+</div>
+"""
+inject_anchor = "<div class=\"card\"><h3 style=\"margin:0 0 8px 0\">JSON</h3>"
+html = base_html.replace(inject_anchor, health_card + inject_anchor)
+
+Utilized these resources as a guide in creating the program:
+https://www.k2view.com/blog/rag-hallucination/
+https://sushantgaurav57.medium.com/llm-chunks-breaking-down-context-efficiently-236dafe7b564
+https://medium.com/@sounder.rahul/chunks-characters-overlapping-in-embedding-models-why-they-matter-ef909b014209
+https://arxiv.org/html/2403.13013v1#
+https://arxiv.org/html/2510.23278v1#
+https://developers.google.com/machine-learning/crash-course/classification/thresholding
+
+
