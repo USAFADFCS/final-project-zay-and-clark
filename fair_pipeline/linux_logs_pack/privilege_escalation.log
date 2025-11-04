@@ -1,0 +1,5 @@
+Nov 03 13:37:00 apollo sudo[4398]:    www-data : command not allowed ; TTY=unknown ; PWD=/var/www ; USER=root ; COMMAND=/bin/bash
+Nov 03 13:38:00 apollo kernel: [  12488.43] audit: type=1100 audit(1762177020): pid=25828 uid=33 auid=33 ses=4294967295 subj==unconfined msg='op=PAM:authentication acct="www-data" exe="/usr/bin/sudo"'
+Nov 03 13:39:00 apollo sudo[15531]:    www-data : 3 incorrect password attempts
+Nov 03 13:40:00 apollo su[52853]: pam_unix(su:auth): authentication failure; logname= uid=33 euid=0 tty=/dev/pts/2 ruser=www-data rhost=  user=root
+Nov 03 13:41:00 apollo su[14633]: FAILED su for root by www-data

@@ -1,0 +1,4 @@
+Nov 03 13:37:00 apollo sftp-server[29768]: session opened for local user backup from [192.0.120.181]
+Nov 03 13:38:00 apollo sftp-server[4256]: sent 154321000 bytes read 2048 bytes
+Nov 03 13:39:00 apollo sftp-server[37883]: close session
+Nov 03 13:40:00 apollo ufw[40946]: UFW ALLOW OUT on eth0 to 192.0.120.181 port 22 proto tcp

@@ -1,0 +1,23 @@
+Category: lateral movement | Subtype: ssh connection between internal hosts
+
+Purpose: Recommended actions when logs indicate ssh connection between internal hosts under lateral movement.
+
+TLDR: Follow containment, investigation, eradication, and hardening steps.
+
+High level actions:
+- TLDR: Stop spread inside the network by blocking credentials and access paths.
+- Confirm: Look for new sessions between internal hosts and reuse of keys.
+- Contain: Disable implicated accounts, rotate keys, and segment the network.
+- Investigate: Correlate SSH, SMB, and RDP logs with asset inventory and EDR telemetry.
+- Eradicate and recover: Close backdoors, clean malware tools, and reset credentials.
+- Hardening: Enforce MFA, restrict east-west traffic, and disable SSH agent forwarding.
+
+Subtype specific steps:
+- Rotate credentials across affected hosts and restrict east-west traffic.
+
+Useful commands:
+$ last -ai | head
+$ grep -i 'Accepted' /var/log/auth.log | grep -v external
+$ find ~/.ssh -maxdepth 1 -type f -name 'authorized_keys' -exec cat {} \;
+
+Notes: Adjust commands for your distro. Preserve evidence before altering the system for forensics when severity is high.

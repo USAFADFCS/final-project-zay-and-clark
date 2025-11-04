@@ -1,0 +1,6 @@
+Nov 03 13:37:00 apollo kernel: [  12629.60] EXT4-fs warning (device sda1): ext4_dx_add_entry: Directory index full
+Nov 03 13:38:00 apollo kernel: [  12615.90] FS-Cache: O_COOKIE enablement failed
+Nov 03 13:39:00 apollo systemd[1]: Started suspicious@encryptor.service.
+Nov 03 13:40:00 apollo suspicious[32689]: encrypting '/home'
+Nov 03 13:41:00 apollo suspicious[46270]: deleting shadow copies
+Nov 03 13:42:00 apollo systemd[1]: Reached target Reboot.

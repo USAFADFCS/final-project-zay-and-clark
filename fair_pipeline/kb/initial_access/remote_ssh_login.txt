@@ -1,0 +1,25 @@
+Category: initial access | Subtype: remote ssh login
+
+Purpose: Recommended actions when logs indicate remote ssh login under initial access.
+
+TLDR: Follow containment, investigation, eradication, and hardening steps.
+
+High level actions:
+- TLDR: Block the entry point, validate accounts and keys, review network ingress, and rotate any exposed secrets.
+- Confirm: Check auth logs for Accepted or Failed entries and unusual sources. Validate new users or keys.
+- Contain: Disable or lock suspicious accounts, revoke tokens, and block source IPs at the firewall.
+- Investigate: Review process trees and recent logins. Correlate with IDS or SIEM alerts.
+- Eradicate and recover: Remove backdoors, rotate credentials, and reinstall compromised services if needed.
+- Hardening: Enforce key based SSH, disable password auth, enable MFA where possible, and rate limit via fail2ban or UFW.
+
+Subtype specific steps:
+- Review recent successful SSH logins and compare to expected sources.
+- Rotate keys or passwords for affected accounts and invalidate active sessions.
+
+Useful commands:
+$ grep 'Accepted' /var/log/auth.log | tail -n 50
+$ last -ai | head
+$ who; w
+$ ss -tupn | grep -i ssh
+
+Notes: Adjust commands for your distro. Preserve evidence before altering the system for forensics when severity is high.

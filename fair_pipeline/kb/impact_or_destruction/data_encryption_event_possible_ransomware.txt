@@ -1,0 +1,22 @@
+Category: impact or destruction | Subtype: data encryption event possible ransomware
+
+Purpose: Recommended actions when logs indicate data encryption event possible ransomware under impact or destruction.
+
+TLDR: Follow containment, investigation, eradication, and hardening steps.
+
+High level actions:
+- TLDR: Preserve evidence while stopping further damage. Treat as major incident.
+- Confirm: Ransomware notes, mass deletion, unexpected reboots, or kernel panics.
+- Contain: Isolate the host immediately. Do not mass reboot. Disable automation that spreads impact.
+- Investigate: Capture volatile data if safe. Identify initial access and timeline.
+- Eradicate and recover: Restore from known good backups, rotate keys, and patch vulnerabilities.
+- Hardening: Backup immutability, segmentation, and tested incident runbooks.
+
+Subtype specific steps:
+- Isolate host, preserve evidence, and coordinate with incident response immediately.
+
+Useful commands:
+$ ls -l --time-style=full-iso | head
+$ journalctl -S -2h | grep -i encrypt
+
+Notes: Adjust commands for your distro. Preserve evidence before altering the system for forensics when severity is high.

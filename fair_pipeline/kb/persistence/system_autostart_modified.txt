@@ -1,0 +1,23 @@
+Category: persistence | Subtype: system autostart modified
+
+Purpose: Recommended actions when logs indicate system autostart modified under persistence.
+
+TLDR: Follow containment, investigation, eradication, and hardening steps.
+
+High level actions:
+- TLDR: Hunt and remove autostart entries and rogue services.
+- Confirm: Check systemd units, cron, rc.local, and shell profiles for suspicious additions.
+- Contain: Disable and mask malicious services. Remove startup hooks.
+- Investigate: Attribute persistence to the intrusion path. Look for paired artifacts like scripts on disk.
+- Eradicate and recover: Remove artifacts, rebuild services, and validate integrity of startup paths.
+- Hardening: Whitelist services, file integrity monitoring, and restrict write access to startup locations.
+
+Subtype specific steps:
+- Remove or disable suspicious services and entries.
+
+Useful commands:
+$ systemctl list-units --type=service --state=running
+$ sudo find /etc/systemd /usr/lib/systemd ~/.config/systemd -name '*.service'
+$ crontab -l; sudo ls -la /etc/cron.*
+
+Notes: Adjust commands for your distro. Preserve evidence before altering the system for forensics when severity is high.

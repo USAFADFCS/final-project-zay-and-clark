@@ -1,0 +1,23 @@
+Category: exfiltration | Subtype: large outbound file transfer
+
+Purpose: Recommended actions when logs indicate large outbound file transfer under exfiltration.
+
+TLDR: Follow containment, investigation, eradication, and hardening steps.
+
+High level actions:
+- TLDR: Block outbound channels and preserve evidence.
+- Confirm: Large transfers, SFTP sessions, or connections to known exfil endpoints.
+- Contain: Block destinations at firewall or proxy and isolate the host.
+- Investigate: Determine data volume and destination. Check cloud storage and tunneling.
+- Eradicate and recover: Remove tools and rotate keys. Follow breach notification procedures.
+- Hardening: Egress filtering, DLP, and rate limiting large transfers.
+
+Subtype specific steps:
+- Block destinations and capture PCAP if possible.
+
+Useful commands:
+$ nethogs -t | head
+$ iftop -t -s 1 | head
+$ ss -tpn | grep -E 'ssh|sftp|rsync|http|https'
+
+Notes: Adjust commands for your distro. Preserve evidence before altering the system for forensics when severity is high.

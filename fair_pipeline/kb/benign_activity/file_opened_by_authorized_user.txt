@@ -1,0 +1,22 @@
+Category: benign activity | Subtype: file opened by authorized user
+
+Purpose: Recommended actions when logs indicate file opened by authorized user under benign activity.
+
+TLDR: Likely harmless. Confirm against baseline and maintenance windows.
+
+High level actions:
+- TLDR: Expected behavior. Validate against baseline and maintenance windows.
+- Confirm: Cross check with maintenance windows and change tickets.
+- Contain: None required.
+- Investigate: Minimal. Keep telemetry for trend analysis.
+- Eradicate and recover: Not applicable.
+- Hardening: Keep baselines current and tune alerts.
+
+Subtype specific steps:
+- Validate with change management and baseline dashboards.
+
+Useful commands:
+$ uptime
+$ whoami
+
+Notes: Adjust commands for your distro. Preserve evidence before altering the system for forensics when severity is high.

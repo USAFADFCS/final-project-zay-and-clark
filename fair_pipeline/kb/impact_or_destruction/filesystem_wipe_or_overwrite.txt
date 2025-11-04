@@ -1,0 +1,21 @@
+Category: impact or destruction | Subtype: filesystem wipe or overwrite
+
+Purpose: Recommended actions when logs indicate filesystem wipe or overwrite under impact or destruction.
+
+TLDR: Follow containment, investigation, eradication, and hardening steps.
+
+High level actions:
+- TLDR: Preserve evidence while stopping further damage. Treat as major incident.
+- Confirm: Ransomware notes, mass deletion, unexpected reboots, or kernel panics.
+- Contain: Isolate the host immediately. Do not mass reboot. Disable automation that spreads impact.
+- Investigate: Capture volatile data if safe. Identify initial access and timeline.
+- Eradicate and recover: Restore from known good backups, rotate keys, and patch vulnerabilities.
+- Hardening: Backup immutability, segmentation, and tested incident runbooks.
+
+Subtype specific steps:
+- Stop destructive processes and pull backup integrity reports.
+
+Useful commands:
+$ inotifywatch -v /important  # if available
+
+Notes: Adjust commands for your distro. Preserve evidence before altering the system for forensics when severity is high.

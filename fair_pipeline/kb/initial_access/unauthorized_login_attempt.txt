@@ -1,0 +1,24 @@
+Category: initial access | Subtype: unauthorized login attempt
+
+Purpose: Recommended actions when logs indicate unauthorized login attempt under initial access.
+
+TLDR: Follow containment, investigation, eradication, and hardening steps.
+
+High level actions:
+- TLDR: Block the entry point, validate accounts and keys, review network ingress, and rotate any exposed secrets.
+- Confirm: Check auth logs for Accepted or Failed entries and unusual sources. Validate new users or keys.
+- Contain: Disable or lock suspicious accounts, revoke tokens, and block source IPs at the firewall.
+- Investigate: Review process trees and recent logins. Correlate with IDS or SIEM alerts.
+- Eradicate and recover: Remove backdoors, rotate credentials, and reinstall compromised services if needed.
+- Hardening: Enforce key based SSH, disable password auth, enable MFA where possible, and rate limit via fail2ban or UFW.
+
+Subtype specific steps:
+- Identify attacking IPs and enable rate limiting and bans.
+- Consider moving SSH to key based auth only.
+
+Useful commands:
+$ grep 'Failed password' /var/log/auth.log | awk '{print $(NF-3)}' | sort | uniq -c | sort -nr | head
+$ sudo ufw limit ssh
+$ sudo apt install fail2ban && sudo systemctl enable --now fail2ban
+
+Notes: Adjust commands for your distro. Preserve evidence before altering the system for forensics when severity is high.

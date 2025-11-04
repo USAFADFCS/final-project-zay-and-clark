@@ -1,0 +1,22 @@
+Category: reconnaissance | Subtype: network scan for open ports
+
+Purpose: Recommended actions when logs indicate network scan for open ports under reconnaissance.
+
+TLDR: Follow containment, investigation, eradication, and hardening steps.
+
+High level actions:
+- TLDR: Identify probing activity and enumerate affected assets to prepare for potential follow on actions.
+- Confirm: Look for repeated connection attempts across many ports or services from the same source.
+- Contain: Rate limit and block abusive IPs. Increase logging on targeted services.
+- Investigate: Review IDS and Zeek or Suricata logs for scan patterns and service probes.
+- Eradicate and recover: Not typically needed unless a service was misconfigured or exposed.
+- Hardening: Close unused ports, enforce least privilege, and hide version banners.
+
+Subtype specific steps:
+- Block or rate limit the scanner. Verify that no sensitive services are exposed.
+
+Useful commands:
+$ grep -i 'SYN' /var/log/ufw.log | tail -n 100
+$ zeek -r capture.pcap  # if packet capture exists
+
+Notes: Adjust commands for your distro. Preserve evidence before altering the system for forensics when severity is high.

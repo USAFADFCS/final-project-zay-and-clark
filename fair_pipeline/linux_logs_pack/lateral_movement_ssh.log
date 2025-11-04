@@ -1,0 +1,5 @@
+Nov 03 13:37:00 apollo sshd[37331]: Accepted publickey for ops from 10.0.2.14 port 51234 ssh2: RSA SHA256:AAAAB3NzaXc...
+Nov 03 13:38:00 apollo sshd[7177]: pam_unix(sshd:session): session opened for user ops by (uid=0)
+Nov 03 13:42:00 apollo sshd[45108]: Connection from 10.0.2.25 port 22 on 10.0.2.14 port 51888 rdomain (nil)
+Nov 03 13:43:00 apollo sshd[51698]: Authentication succeeded (publickey). Keys used from /home/ops/.ssh/authorized_keys
+Nov 03 13:44:00 apollo sshd[27860]: Remote: Forced command: scp /etc/ssh/ssh_host_rsa_key.pub

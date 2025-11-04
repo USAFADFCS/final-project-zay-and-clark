@@ -1,0 +1,21 @@
+Category: privilege escalation | Subtype: execution of process with root privileges
+
+Purpose: Recommended actions when logs indicate execution of process with root privileges under privilege escalation.
+
+TLDR: Follow containment, investigation, eradication, and hardening steps.
+
+High level actions:
+- TLDR: Detect and block elevation. Validate sudoers and set strict permissions.
+- Confirm: Search for recent changes to sudoers and su usage. Review setuid binaries.
+- Contain: Revoke elevated sessions and remove unauthorized sudo entries.
+- Investigate: Review logs for exploit attempts like CVE based privilege escalations.
+- Eradicate and recover: Patch the OS, remove rogue users or groups, and rotate credentials.
+- Hardening: Use least privilege, require MFA for admin accounts, and audit setuid files regularly.
+
+Subtype specific steps:
+- No extra steps
+
+Useful commands:
+$ echo 'No specific commands'
+
+Notes: Adjust commands for your distro. Preserve evidence before altering the system for forensics when severity is high.

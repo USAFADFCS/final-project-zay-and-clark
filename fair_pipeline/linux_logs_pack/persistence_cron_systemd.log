@@ -1,0 +1,5 @@
+Nov 03 13:37:00 apollo CRON[35698]: (root) CMD (/bin/sh -c '/usr/bin/curl -fsSL http://192.0.88.67/ping > /dev/null 2>&1')
+Nov 03 13:38:00 apollo systemd[1]: Created slice suspicious.service slice.
+Nov 03 13:39:00 apollo systemd[1]: Starting suspicious.service...
+Nov 03 13:40:00 apollo systemd[1]: Started suspicious.service.
+Nov 03 13:41:00 apollo systemd[1]: suspicious.service: Service has no ExecStop= setting, which is unusual.

@@ -1,0 +1,14 @@
+Nov 03 13:37:00 apollo systemd[1]: Started Daily apt download activities.
+Nov 03 13:38:00 apollo systemd[1]: Starting Rotate log files...
+Nov 03 13:39:00 apollo CRON[12214]: (root) CMD (run-parts /etc/cron.daily)
+Nov 03 13:40:00 apollo kernel: [  12351.17] iwlwifi 0000:00:14.3: Unhandled alg: 0x707
+Nov 03 13:41:00 apollo NetworkManager[16725]: <info>  [link-eth0]: state change: activated -> activated (reason 'refresh')
+Nov 03 13:42:00 apollo systemd[1]: Starting Daily man-db regeneration...
+Nov 03 13:43:00 apollo man-db[20709]: Building manual page index
+Nov 03 13:44:00 apollo systemd[1]: man-db.service: Succeeded.
+Nov 03 13:45:00 apollo sshd[11110]: Accepted publickey for dev from 10.0.0.15 port 53022 ssh2: RSA SHA256:xxx
+Nov 03 13:46:00 apollo sshd[17208]: pam_unix(sshd:session): session opened for user dev by (uid=0)
+Nov 03 13:47:00 apollo sudo[17110]:   dev : TTY=pts/0 ; PWD=/home/dev ; USER=root ; COMMAND=/usr/bin/apt list --upgradable
+Nov 03 13:48:00 apollo sudo[59301]: pam_unix(sudo:session): session opened for user root by dev(uid=0)
+Nov 03 13:49:00 apollo sudo[38008]: pam_unix(sudo:session): session closed for user root
+Nov 03 13:50:00 apollo systemd[1]: Finished Rotate log files.

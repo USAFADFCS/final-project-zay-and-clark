@@ -1,0 +1,21 @@
+Category: execution | Subtype: execution of shell script
+
+Purpose: Recommended actions when logs indicate execution of shell script under execution.
+
+TLDR: Follow containment, investigation, eradication, and hardening steps.
+
+High level actions:
+- TLDR: Identify and stop malicious processes and scripts. Collect evidence before removal.
+- Confirm: Inspect process trees, recent exec events, and unusual shells or interpreters.
+- Contain: Kill malicious processes, isolate the host from the network if needed.
+- Investigate: Pull bash history and auditd logs for execve events and parent pids.
+- Eradicate and recover: Remove scripts, binaries, and crontab entries. Reimage if integrity is uncertain.
+- Hardening: AppArmor or SELinux policies, allowlist execution, and monitor for encoded commands like base64.
+
+Subtype specific steps:
+- No extra steps
+
+Useful commands:
+$ echo 'No specific commands'
+
+Notes: Adjust commands for your distro. Preserve evidence before altering the system for forensics when severity is high.

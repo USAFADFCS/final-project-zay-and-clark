@@ -1,0 +1,21 @@
+Category: defense evasion | Subtype: log file deletion
+
+Purpose: Recommended actions when logs indicate log file deletion under defense evasion.
+
+TLDR: Follow containment, investigation, eradication, and hardening steps.
+
+High level actions:
+- TLDR: Restore visibility. Re-enable logging and controls, and investigate tampering.
+- Confirm: Disabled auditd or syslog, cleared histories, firewall changes, or disabled MAC.
+- Contain: Reapply known-good configs and block the actor path.
+- Investigate: Identify who disabled controls and when. Use remote logs for timeline.
+- Eradicate and recover: Rebuild configs, re-enable agents, and reimage if integrity is doubtful.
+- Hardening: Remote logging, protected logs, and configuration management to auto-heal changes.
+
+Subtype specific steps:
+- No extra steps
+
+Useful commands:
+$ echo 'No specific commands'
+
+Notes: Adjust commands for your distro. Preserve evidence before altering the system for forensics when severity is high.

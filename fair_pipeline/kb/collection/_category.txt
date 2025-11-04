@@ -1,0 +1,21 @@
+Category: collection
+
+Purpose: Recommended actions when logs indicate collection.
+
+TLDR: Follow containment, investigation, eradication, and hardening steps.
+
+High level actions:
+- TLDR: Stop staged data collection and secure sensitive files.
+- Confirm: Access to sensitive paths, tar or zip archives, or credential dumps.
+- Contain: Kill staging processes and restrict file access. Lock accounts involved.
+- Investigate: Identify scope of data touched and whether staging directories exist.
+- Eradicate and recover: Remove archives and malware. Notify stakeholders if sensitive data was exposed.
+- Hardening: Implement file access monitoring and limit read permissions.
+
+Subtype specific steps:
+- No extra steps
+
+Useful commands:
+$ echo 'No specific commands'
+
+Notes: Adjust commands for your distro. Preserve evidence before altering the system for forensics when severity is high.

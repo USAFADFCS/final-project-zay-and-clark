@@ -1,0 +1,21 @@
+Category: credential access | Subtype: access to etc shadow or etc passwd
+
+Purpose: Recommended actions when logs indicate access to etc shadow or etc passwd under credential access.
+
+TLDR: Follow containment, investigation, eradication, and hardening steps.
+
+High level actions:
+- TLDR: Assume credential compromise and rotate secrets. Hunt for dumps and key theft.
+- Confirm: Access to /etc/shadow or credential stores, password changes, and dump utilities.
+- Contain: Lock impacted accounts and revoke tokens or sessions.
+- Investigate: Scope which stores were touched and whether secrets were exfiltrated.
+- Eradicate and recover: Remove dump tools, rotate all impacted credentials and keys.
+- Hardening: Use PAM limits, secure boot, hardware-backed keys, and disable password logins.
+
+Subtype specific steps:
+- Assume credential compromise and force password resets immediately.
+
+Useful commands:
+$ sudo ausearch -f /etc/shadow -ts recent
+
+Notes: Adjust commands for your distro. Preserve evidence before altering the system for forensics when severity is high.

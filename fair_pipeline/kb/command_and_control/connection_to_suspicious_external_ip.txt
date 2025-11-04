@@ -1,0 +1,21 @@
+Category: command and control | Subtype: connection to suspicious external ip
+
+Purpose: Recommended actions when logs indicate connection to suspicious external ip under command and control.
+
+TLDR: Follow containment, investigation, eradication, and hardening steps.
+
+High level actions:
+- TLDR: Cut the beacon, kill the process, and find persistence.
+- Confirm: Reverse shells, periodic DNS or HTTP callbacks, or connections to bad IPs.
+- Contain: Block IOCs and kill processes. Isolate the host if needed.
+- Investigate: Trace parent process, review bash history, and search for droppers.
+- Eradicate and recover: Remove persistence, clean binaries, and reimage if rootkit is suspected.
+- Hardening: Egress controls, DNS sinkhole, and audited allowlists for outbound traffic.
+
+Subtype specific steps:
+- Block the IP at the firewall and search across the fleet for hits.
+
+Useful commands:
+$ echo 'No specific commands'
+
+Notes: Adjust commands for your distro. Preserve evidence before altering the system for forensics when severity is high.

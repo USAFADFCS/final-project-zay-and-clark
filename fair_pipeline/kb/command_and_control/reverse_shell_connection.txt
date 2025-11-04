@@ -1,0 +1,23 @@
+Category: command and control | Subtype: reverse shell connection
+
+Purpose: Recommended actions when logs indicate reverse shell connection under command and control.
+
+TLDR: Follow containment, investigation, eradication, and hardening steps.
+
+High level actions:
+- TLDR: Cut the beacon, kill the process, and find persistence.
+- Confirm: Reverse shells, periodic DNS or HTTP callbacks, or connections to bad IPs.
+- Contain: Block IOCs and kill processes. Isolate the host if needed.
+- Investigate: Trace parent process, review bash history, and search for droppers.
+- Eradicate and recover: Remove persistence, clean binaries, and reimage if rootkit is suspected.
+- Hardening: Egress controls, DNS sinkhole, and audited allowlists for outbound traffic.
+
+Subtype specific steps:
+- Identify persistence used to regain access and remove it.
+
+Useful commands:
+$ lsof -nPi | grep -E 'ESTABLISHED|SYN_SENT'
+$ crontab -l
+$ grep -R 'nc -e\|bash -i' -n / 2>/dev/null | head
+
+Notes: Adjust commands for your distro. Preserve evidence before altering the system for forensics when severity is high.
